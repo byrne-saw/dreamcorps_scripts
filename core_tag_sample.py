@@ -18,6 +18,8 @@ config_vars = {
     "MYSQL_HOST": "",
     "MYSQL_DB": "",
     "MYSQL_PORT": "",
+    # google:
+    "GOOGLE_APPLICATION_CREDENTIALS": ""
 }
 
 
@@ -28,7 +30,7 @@ import os  # noqa: E402
 
 # //To Script Writer//: import any connectors your script uses
 # from parsons import utilities, logger
-from parsons import MySQL
+from parsons import MySQL, GoogleCloudStorage
 
 # Setup
 
@@ -39,6 +41,7 @@ for name, value in config_vars.items():
 
 # //To Script Writer// : instantiate connectors here, eg: rs = Redshift().
 mysql = MySQL()
+gcs = GoogleCloudStorage()
 
 # Code
 #save a full table to .csv
@@ -46,7 +49,18 @@ mysql = MySQL()
 with mysql.connection() as conn:
   core_tag_table = mysql.query("SELECT * FROM core_tag", parameters=None)
 
-core_tag_table.to_csv(local_path="./core_tag.csv", temp_file_compression=None, encoding=None, errors='strict', write_header=True, csv_name=None,)
+# core_tag_table.to_csv(local_path="./core_tag.csv", temp_file_compression=None, encoding=None, errors='strict', write_header=True, csv_name=None,)
+
+#Google Cloud Storage (gcs): https://move-coop.github.io/parsons/html/google.html#cloud-storage
+
+#save to gcs, in the parson's test bucket as core_tag_blob
+#set upload_table variables
+table = core_tag_table
+bucket_name = 'dc_parsons_test'
+blob_name = 'core_table_blob'
+#upload table to gcs
+gcs.upload_table(table, bucket_name, blob_name, data_type='csv', default_acl=None)
+
 
   
 
