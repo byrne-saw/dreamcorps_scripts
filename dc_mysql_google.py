@@ -18,7 +18,7 @@ config_vars = {
     "MYSQL_HOST": "",
     "MYSQL_DB": "",
     "MYSQL_PORT": "",
-    # bigquery:
+    # google:
     "GOOGLE_APPLICATION_CREDENTIALS": ""
 }
 

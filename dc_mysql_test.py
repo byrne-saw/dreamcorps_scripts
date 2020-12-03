@@ -1,6 +1,6 @@
 # ### METADATA
 
-# Connectors:
+# Connectors: 
 # Description:
 
 # ### CONFIGURATION
@@ -41,10 +41,11 @@ for name, value in config_vars.items():
 mysql = MySQL()
 
 # Code
-
+#save a full table to .csv
 with mysql.connection() as conn:
+  core_tag_table = mysql.query("SELECT * FROM core_tag", parameters=None)
 
-  sql = "SELECT count(*) FROM core_user"
+core_tag_table.to_csv(local_path="./core_tag.csv", temp_file_compression=None, encoding=None, errors='strict', write_header=True, csv_name=None,)
 
-  mysql.query(sql, parameters=None).to_csv(local_path="./results.csv", temp_file_compression=None, encoding=None, errors='strict', write_header=True, csv_name=None,)
+  
 
